@@ -1,0 +1,54 @@
+name: acromedia
+recipe: drupal8
+
+config:
+  # PHP 7 is required for Search API Solr 2.
+  php: '7.2'
+  webroot: web
+  database: mariadb:10.3
+
+# Get nice url's for each service.
+proxy:
+  search:
+    - admin.solr.lndo.site:8983
+  mailhog:
+    - mail.drupal8.lndo.site
+  pma:
+    - pma.drupal8.lndo.site
+
+services:
+  # Solr
+  # Spin up a Solr container called "search".
+  search:
+    # Use a specific Solr version, same as the default one at the time of writing.
+    type: solr:5.5
+    # Optionally declare the name of the Solr core.
+    # This setting is only applicable for versions 5.5 and above.
+    core: drupal8
+    # Optionally allow access at localhost:9999.
+    # You will need to make sure port 9999 is open on your machine.
+    # You can also set `portforward: true` to have Lando dynamically assign a port. 
+    # Unlike specifying an actual port setting this to true will give you
+    # a different port every time you restart your app.
+    portforward: 9999
+    # Optionally use custom Solr config files eg (schema.xml and solrconfig.xml).
+    # This is relative to the app root (which may be different from your webroot).
+    # This should be the directory containing the schema.xml and solrconfig.xml files, not the path to a certain file.
+    config:
+      conf: web/modules/contrib/search_api_solr/solr-conf/5.x
+  # MailHog
+  mailhog:
+    # Use the latest mailhog version
+    type: mailhog
+    # List of services that we want to capture mail from.
+    # You can run `lando info` to get a list of services that are available
+    # Mailhog expects that these services will be php services.
+    hogfrom:
+      - appserver
+    # Optionally allow access to the smtp service at localhost:1026.
+    portforward: 1025
+  # PhpMyAdmin
+  pma:
+    type: phpmyadmin
+    hosts:
+      - database
