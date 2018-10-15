@@ -1,4 +1,4 @@
-# Urban Hipster - Commerce 2 & Drupal 8 Demo
+# Urban Hipster - Commerce 2 & Drupal 8 Demo - added .lando.yml and lando database in dumps
 
 This is a full __Commerce 2__ demo website built on __Drupal 8__. It has been built for 3 reasons:
 
